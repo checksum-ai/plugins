@@ -23,13 +23,18 @@ On enable, Claude Code prompts for your **Checksum API key** (grab it from the w
 
 ## Use it
 
-Just ask Claude in natural language — it picks the right tool:
+Run a command, or just ask in natural language:
 
-- *"Use Checksum to generate tests for PR 142 in acme/web on branch feature/checkout."*
+```
+/checksum:generate    # generate tests for your current branch's changes
+/checksum:heal        # heal a failing test run
+```
+
+- *"Generate Checksum tests for my changes on this branch."*
 - *"Use Checksum to generate a test for the login flow with an invalid password."*
-- *"Heal the failing tests in Checksum test run 7f3a… and open a PR with the fixes."*
+- *"Heal the failing tests in Checksum test run 7f3a…"*
 
-Claude calls `checksum_generate` / `checksum_heal`, gets a `batchId`, polls `checksum_status` until it's done, and reports the pull request URL(s).
+Generation and healing run in **Checksum's cloud**, which checks out your code repository at a branch. So the commands first make sure your current branch is **pushed to the remote** (pushing it if needed — never `main`/`master`, never force), then pass that branch to Checksum so the agent sees exactly the code you're working on. Claude then polls until the run finishes and reports the pull request URL(s).
 
 ## Links
 
