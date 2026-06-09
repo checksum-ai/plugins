@@ -1,0 +1,19 @@
+{
+  "name": "checksum-ai",
+  "owner": {
+    "name": "Checksum AI",
+    "url": "https://checksum.ai"
+  },
+  "metadata": {
+    "description": "Official Checksum AI plugins for Claude Code.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "checksum",
+      "source": "./plugins/checksum",
+      "description": "Generate and heal end-to-end tests with Checksum AI from your IDE — connects Claude Code to Checksum's hosted MCP server.",
+      "category": "testing"
+    }
+  ]
+}

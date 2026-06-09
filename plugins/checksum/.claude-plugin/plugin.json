@@ -1,0 +1,22 @@
+{
+  "name": "checksum",
+  "description": "Generate and heal end-to-end tests with Checksum AI directly from your IDE.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Checksum AI",
+    "url": "https://checksum.ai"
+  },
+  "homepage": "https://checksum.ai/docs/mcp-server",
+  "repository": "https://github.com/checksum-ai/plugins",
+  "license": "MIT",
+  "keywords": ["testing", "e2e", "playwright", "test-generation", "qa"],
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "Checksum API key",
+      "description": "Your Checksum API key from the web app (app.checksum.ai) — the same key used by the CLI and CI.",
+      "sensitive": true,
+      "required": true
+    }
+  }
+}
