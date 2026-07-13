@@ -1,38 +1,37 @@
 ---
-description: Heal failing Checksum tests for the current branch. Ensures the branch is pushed to the remote, then triggers a cloud heal for a failing test run and reports the PR. Use when the user asks to heal or fix failing Checksum tests.
+description: Heal failing Checksum tests. Finds a test run with failures, inspects why it failed, then triggers a cloud heal and reports the PR with the fixes. Use when the user asks to heal or fix failing Checksum tests.
 ---
 
 # Heal Checksum tests
 
-Healing runs **in the cloud** against the code repository at a branch, so — exactly like generation — the branch must be pushed to the remote first. Otherwise the heal agent works against stale code and the fix targets the wrong thing.
+Healing operates on a **Checksum test run that already finished with failures**. It works from that run — not from your local working tree — so there is nothing to push and no branch to line up first. All you need is the `testRunId`.
+
+Checksum opens **one** heal session covering all the failing tests in the run (not one per test) and, by default, a pull request with the fixes.
 
 ## Steps
 
-Run these from the user's **code repository**.
+1. **Find the failing test run.**
+   - If the user named one, use it.
+   - Otherwise call `checksum_test_run_list` — it returns recent runs newest-first with a `failedCount` and a `testRunUrl` each. Offer the most recent run that has failures rather than making the user hunt for an id.
 
-1. **Get the failing test run.** Healing operates on a Checksum test run that has failures.
-   - If the user didn't name one, call `checksum_test_run_list` (newest first, `failedCount` per run) and offer them the most recent run with failures instead of making them go hunt for an id.
-   - To see *why* a run failed before healing it, call `checksum_test_run_download` with the `testRunId` — it returns the per-test results inline, plus signed URLs for the report, trace, screenshots and video.
+2. **Understand the failure before healing it** (do this unless the user just wants it fixed blind):
+   - Call `checksum_test_run_download` with the `testRunId`. That returns the per-test results inline (which tests failed, and their error messages) plus a signed link to the HTML report.
+   - To dig into one specific test, call it again with that test's `testId` (from the returned `tests[]`) to get its trace, screenshots and video.
+   - Tell the user briefly what actually failed. A failure can be a genuine application bug, not a broken test — see below.
 
-2. **Identify repo + branch and ensure it's pushed:**
-   - Branch: `git rev-parse --abbrev-ref HEAD`
-   - Repo slug: `git remote get-url origin` → `<owner>/<repo>` (strip the `git@github.com:` / `https://github.com/` prefix and trailing `.git`).
-   - If there's no upstream (`git rev-parse --abbrev-ref --symbolic-full-name @{u}` fails) → `git push -u origin <branch>`. If the upstream exists but the local branch is ahead → `git push`.
-   - Never force-push, and never push local commits to `main`/`master`. Tell the user which branch you pushed.
+3. **Trigger the heal** by calling `checksum_test_heal` with:
+   - `testRunId`: from step 1. **This is the only argument you need.**
+   - Do **not** pass `branch` unless the user explicitly asks the heal PR to target a different branch. It defaults to the branch the test run executed on, which is almost always what you want — passing your local code branch here will target a branch that may not even exist in the tests repo.
+   - `autoCreatePR`: leave it alone (defaults to opening a PR with the fixes).
 
-3. **Trigger heal** by calling the `checksum_test_heal` tool with:
-   - `testRunId`: from step 1
-   - `repoName`: the `<owner>/<repo>` slug
-   - `branch`: the current branch — so the heal PR targets your branch and the agent works against your code
+   It returns a `batchId`, a `testRunUrl`, and a `sessionUrl`.
 
-   It returns a `batchId`, a `testRunUrl`, and one `sessionUrl` per failing test (healing fans out one session per test).
-
-4. **Give the user the `testRunUrl` and `sessionUrls` right away** so they can watch the healing in the Checksum web app.
+4. **Give the user the `testRunUrl` and `sessionUrl` right away** so they can watch the healing in the Checksum web app.
 
 5. **Poll** `checksum_session_status` with that `batchId` until `allTerminal` is true. It also returns the agent's latest messages and file changes, so you can report what it actually changed.
 
-6. **Report the result:** each session's `prUrl` — the pull request Checksum opened with the healed tests — plus the links above. Give them as clickable links, never as raw ids.
+6. **Report the result:** the session's `prUrl` — the pull request Checksum opened with the healed tests — plus the links above. Give them as clickable links, never as raw ids.
 
 ## Important
 
-Healing can legitimately conclude a failure is a **real application bug**, not a broken test. When `checksum_session_status` reports a heal outcome saying so, tell the user plainly — do not "fix" the test to make a genuine bug go green.
+Healing can legitimately conclude a failure is a **real application bug**, not a broken test. When the heal outcome says so, tell the user plainly — do not "fix" the test to make a genuine bug go green. That is the single most valuable thing this tool tells you.

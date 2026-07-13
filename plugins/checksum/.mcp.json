@@ -2,10 +2,7 @@
   "mcpServers": {
     "checksum": {
       "type": "http",
-      "url": "https://api.checksum.ai/public-api/mcp",
-      "headers": {
-        "Authorization": "Bearer ${user_config.api_key}"
-      }
+      "url": "https://api.checksum.ai/public-api/mcp"
     }
   }
 }
