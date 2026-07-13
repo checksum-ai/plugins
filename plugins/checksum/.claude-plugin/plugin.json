@@ -1,7 +1,7 @@
 {
   "name": "checksum",
   "description": "Generate and heal end-to-end tests with Checksum AI directly from your IDE.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Checksum AI",
     "url": "https://checksum.ai"

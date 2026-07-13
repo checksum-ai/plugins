@@ -17,9 +17,9 @@ On enable, Claude Code prompts for your **Checksum API key** (grab it from the w
 
 | Tool | What it does |
 |------|--------------|
-| `checksum_generate` | Start a test-generation run for a pull request, or for a flow you describe in plain text. Returns a `batchId`. |
-| `checksum_heal` | Start an auto-heal run for the failing tests in a test run. Returns a `batchId`. |
-| `checksum_status` | Poll a `batchId` until the run finishes, then read each session's `prUrl` — the pull request opened with the new or healed tests. |
+| `checksum_test_generate` | Start a test-generation run for a pull request, or for a flow you describe in plain text. Returns a `batchId`. |
+| `checksum_test_heal` | Start an auto-heal run for the failing tests in a test run. Returns a `batchId`. |
+| `checksum_session_status` | Poll a `batchId` until the run finishes, then read each session's `prUrl` — the pull request opened with the new or healed tests. |
 
 ## Use it
 

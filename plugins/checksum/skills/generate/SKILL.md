@@ -23,12 +23,16 @@ Run these from the user's **code repository** (not the Checksum test repo).
    - Never force-push. Never push local commits to `main`/`master` on the user's behalf.
    - Tell the user which branch you pushed (one line).
 
-3. **Trigger generation** by calling the `checksum_generate` tool with:
+3. **Trigger generation** by calling the `checksum_test_generate` tool with:
    - `repoName`: the `<owner>/<repo>` slug from step 1
    - `branch`: the current branch from step 1 — this is what the cloud agent checks out
    - `prNumber`: include it if the user referenced a specific PR
    - `extraInstructions`: anything the user said about what to cover
 
-   It returns a `batchId`.
+   It returns a `batchId` and a `sessionUrl`.
 
-4. **Poll** `checksum_status` with that `batchId` until `allTerminal` is true, then report each session's `prUrl` — the pull request Checksum opened with the generated tests.
+4. **Give the user the `sessionUrl` right away** so they can watch the run in the Checksum web app while it works.
+
+5. **Poll** `checksum_session_status` with that `batchId` until `allTerminal` is true. While polling, it also returns the agent's latest messages and file changes, so you can tell the user what it's doing rather than just "still running".
+
+6. **Report the result:** each session's `prUrl` — the pull request Checksum opened with the generated tests — plus the `sessionUrl`. Give both as clickable links, never as raw ids.
