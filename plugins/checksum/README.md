@@ -11,7 +11,7 @@ No local install, no Playwright engine: work runs in Checksum's cloud and lands 
 /plugin install checksum@checksum-ai
 ```
 
-Then run `/mcp`, pick **checksum**, and sign in through your browser. There's no API key to copy or paste — you approve which Checksum projects Claude may act on, and you can revoke it any time from **Settings → Integrations** in the web app.
+Then run `/mcp`, pick **checksum**, and sign in through your browser. There's no API key to copy or paste — you approve which Checksum projects Claude may act on, and you can revoke it any time from the **MCP connections** card on **My Profile** in the web app.
 
 ## Tools
 
