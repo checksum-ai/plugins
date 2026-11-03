@@ -25,6 +25,7 @@ Then run `/mcp`, pick **checksum**, and sign in through your browser. There's no
 | `checksum_test_run_download` | Gets a run's results inline, plus download links for the report, traces, screenshots and video. |
 | `checksum_session_list` | Lists recent agent sessions. |
 | `checksum_session_prompt` | Sends a follow-up instruction into a running session, to steer it mid-run. |
+| `checksum_bug_create` | Files a bug in your app, optionally linking the failing test from a run. Returns a link to the bug. |
 
 ## Use it
 
@@ -41,7 +42,7 @@ Run a command, or just ask in natural language:
 
 **Generating** runs in Checksum's cloud, which checks out your code repository at a branch — so `/checksum:generate` first makes sure your branch is **pushed** (pushing it if needed; never `main`/`master`, never force). Checksum opens a pull request with the tests when the branch has one, so the command resolves the PR for you.
 
-**Healing** works from a test run that already finished, so there's nothing to push — `/checksum:heal` finds a run with failures, shows you why it failed, and opens a PR with the fixes. If a failure turns out to be a real application bug rather than a broken test, it says so instead of forcing the test green.
+**Healing** works from a test run that already finished, so there's nothing to push — `/checksum:heal` finds a run with failures, shows you why it failed, and opens a PR with the fixes. If a failure turns out to be a real application bug rather than a broken test, it says so instead of forcing the test green, and can file the bug in Checksum for you.
 
 ## Links
 

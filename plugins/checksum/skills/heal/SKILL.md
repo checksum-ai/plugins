@@ -34,4 +34,4 @@ Checksum opens **one** heal session covering all the failing tests in the run (n
 
 ## Important
 
-Healing can legitimately conclude a failure is a **real application bug**, not a broken test. When the heal outcome says so, tell the user plainly — do not "fix" the test to make a genuine bug go green. That is the single most valuable thing this tool tells you.
+Healing can legitimately conclude a failure is a **real application bug**, not a broken test. When the heal outcome says so, tell the user plainly — do not "fix" the test to make a genuine bug go green. That is the single most valuable thing this tool tells you. Offer to file it with `checksum_bug_create`: a title, a description of what the app does wrong, and the run's `testRunId` plus the test's `checksumTestId` (from `checksum_test_run_download`) so the test is linked to the bug. File it only if the user agrees, then show them the returned `bugUrl`.
